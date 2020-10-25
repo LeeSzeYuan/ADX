@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adx App</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.sound.min.js"></script>
+    
+    <script src="https://unpkg.com/ml5@0.5.0/dist/ml5.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+</head>
+<body>
+    <section class="hero is-primary">
+        <div class="hero-body">
+            <div class="container">
+            <h1 class="title">
+                ADX App
+            </h1>
+            <h2 class="subtitle">
+                created by Team Adx
+            </h2>
+            </div>
+        </div>
+    </section>
+
+    <div id="bar"></div>
+
+    <section class="section">
+        <div class="container" id="video">
+
+
+    <script type="text/javascript">
+        // Teachable Machine
+        // The Coding Train / Daniel Shiffman
+        // https://thecodingtrain.com/TeachableMachine/1-teachable-machine.html
+        // https://editor.p5js.org/codingtrain/sketches/PoZXqbu4v
+
+
+        // For displaying the label
+        let label = "waiting...";
+        let input;
+        let img;
+        // The classifier
+        let classifier;
+        let modelURL = 'https://teachablemachine.withgoogle.com/models/7Um5CmERr/';
+
+        // STEP 1: Load the model!
+        function preload() {
+        classifier = ml5.imageClassifier(modelURL + 'model.json');
+        }
+
+
+        function setup() {
+        createCanvas(640, 520).position(windowWidth/3.4, windowHeight/4);
+        input = createFileInput(handleFile);
+        input.position(450, 160);
+        // Create the video
+        // video = createCapture(VIDEO);
+        // video.hide();
+
+        
+        // STEP 2: Start classifying
+        //classifyVideo();
+        }
+
+        // STEP 2 classify the videeo!
+        function classifyVideo() {
+            classifier.classify(img, gotResults);
+        }
+
+        function draw() {
+        background(255);
+
+        // Draw the video
+
+        if (img) {
+            image(img, 30, 0, 580, 450);
+
+            classifyVideo();
+        }
+        
+
+        // STEP 4: Draw the label
+        textSize(32);
+        textAlign(CENTER, CENTER);
+        fill(0);
+        text(label, width / 2, height - 16);
+
+
+        // Draw the emoji
+        textSize(256);
+        }
+
+        // STEP 3: Get the classification!
+        function gotResults(error, results) {
+        // Something went wrong!
+        if (error) {
+            console.error(error);
+            return;
+        }
+        console.log(results)
+        // Store the label and classify again!
+        label = `${results[0].label}: ${((results[0].confidence*100).toFixed(2))}%      ${results[1].label}: ${(results[1].confidence*100).toFixed(2)}%`;
+        classifyVideo();
+        }
+
+        function handleFile(file) {
+        print(file);
+        if (file.type === 'image') {
+            img = createImg(file.data, '');
+            img.hide();
+        } else {
+            img = null;
+        }
+        }
+    
+
+    </script>
+    </div>
+    </section>
+</body>
+</html>
